@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+service ExpenseTracker {
+    rpc CreateExpense(CreateExpenseRequest) returns (CreateExpenseResponse) {}
+    rpc GetExpense(GetExpenseRequest) returns (GetExpenseResponse) {}
+    rpc ListExpenses(ListExpensesRequest) returns (ListExpensesResponse) {}
+    rpc UpdateExpense(UpdateExpenseRequest) returns (UpdateExpenseResponse) {}
+    rpc DeleteExpense(DeleteExpenseRequest) returns (DeleteExpenseResponse) {}
+  }
+  
+  enum ExpenseCategory {
+    UNKNOWN = 0;
+    FOOD = 1;
+    TRANSPORT = 2;
+    SHOPPING = 3;
+    ENTERTAINMENT = 4; 
+    BILLS = 5;
+    EDUCATION = 6;
+    HEALTH = 7;
+    OTHER = 8;
+  }
+  
+  message CreateExpenseRequest {
+    Expense expense = 1;
+  }
+  
+  message CreateExpenseResponse {
+    int32 id = 1;
+    ReturnMsg return_msg = 2;
+  }
+  
+  message GetExpenseRequest {
+    int32 id = 1;
+  }
+  
+  message GetExpenseResponse {
+    Expense expense = 1;
+    ReturnMsg return_msg = 2;
+  }
+  
+  message ListExpensesRequest {
+    string date = 1;
+  }
+  
+  message Expense {
+    int32 id = 1;
+    string title = 2;
+    double amount = 3;
+    ExpenseCategory category = 4;
+    string date = 5;
+  }
+  message ReturnMsg{
+    int32 code = 1;
+    string msg = 2;
+  }
+  message ListExpensesResponse {
+    repeated Expense expenses = 1;
+  }
+  
+  message UpdateExpenseRequest {
+    Expense expense = 1;
+  }
+  
+  message UpdateExpenseResponse {
+    int32  id = 1;
+    ReturnMsg return_msg = 2;
+  }
+  message DeleteExpenseRequest {
+    int32 id = 1;
+  }
+  
+  message DeleteExpenseResponse {
+    int32  id = 1;
+    ReturnMsg return_msg = 2;
+  }
