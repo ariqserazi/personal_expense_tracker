@@ -72,14 +72,14 @@ class CreateExpenseRequest extends $pb.GeneratedMessage {
 class CreateExpenseResponse extends $pb.GeneratedMessage {
   factory CreateExpenseResponse({
     $core.int? id,
-    ReturnMsg? returnMsg,
+    SuccessStatus? status,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
     }
-    if (returnMsg != null) {
-      $result.returnMsg = returnMsg;
+    if (status != null) {
+      $result.status = status;
     }
     return $result;
   }
@@ -89,7 +89,7 @@ class CreateExpenseResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateExpenseResponse', createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.O3)
-    ..aOM<ReturnMsg>(2, _omitFieldNames ? '' : 'returnMsg', subBuilder: ReturnMsg.create)
+    ..aOM<SuccessStatus>(2, _omitFieldNames ? '' : 'status', subBuilder: SuccessStatus.create)
     ..hasRequiredFields = false
   ;
 
@@ -124,15 +124,15 @@ class CreateExpenseResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  ReturnMsg get returnMsg => $_getN(1);
+  SuccessStatus get status => $_getN(1);
   @$pb.TagNumber(2)
-  set returnMsg(ReturnMsg v) { setField(2, v); }
+  set status(SuccessStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasReturnMsg() => $_has(1);
+  $core.bool hasStatus() => $_has(1);
   @$pb.TagNumber(2)
-  void clearReturnMsg() => clearField(2);
+  void clearStatus() => clearField(2);
   @$pb.TagNumber(2)
-  ReturnMsg ensureReturnMsg() => $_ensure(1);
+  SuccessStatus ensureStatus() => $_ensure(1);
 }
 
 class GetExpenseRequest extends $pb.GeneratedMessage {
@@ -188,14 +188,14 @@ class GetExpenseRequest extends $pb.GeneratedMessage {
 class GetExpenseResponse extends $pb.GeneratedMessage {
   factory GetExpenseResponse({
     Expense? expense,
-    ReturnMsg? returnMsg,
+    SuccessStatus? status,
   }) {
     final $result = create();
     if (expense != null) {
       $result.expense = expense;
     }
-    if (returnMsg != null) {
-      $result.returnMsg = returnMsg;
+    if (status != null) {
+      $result.status = status;
     }
     return $result;
   }
@@ -205,7 +205,7 @@ class GetExpenseResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetExpenseResponse', createEmptyInstance: create)
     ..aOM<Expense>(1, _omitFieldNames ? '' : 'expense', subBuilder: Expense.create)
-    ..aOM<ReturnMsg>(2, _omitFieldNames ? '' : 'returnMsg', subBuilder: ReturnMsg.create)
+    ..aOM<SuccessStatus>(2, _omitFieldNames ? '' : 'status', subBuilder: SuccessStatus.create)
     ..hasRequiredFields = false
   ;
 
@@ -242,15 +242,15 @@ class GetExpenseResponse extends $pb.GeneratedMessage {
   Expense ensureExpense() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  ReturnMsg get returnMsg => $_getN(1);
+  SuccessStatus get status => $_getN(1);
   @$pb.TagNumber(2)
-  set returnMsg(ReturnMsg v) { setField(2, v); }
+  set status(SuccessStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasReturnMsg() => $_has(1);
+  $core.bool hasStatus() => $_has(1);
   @$pb.TagNumber(2)
-  void clearReturnMsg() => clearField(2);
+  void clearStatus() => clearField(2);
   @$pb.TagNumber(2)
-  ReturnMsg ensureReturnMsg() => $_ensure(1);
+  SuccessStatus ensureStatus() => $_ensure(1);
 }
 
 class ListExpensesRequest extends $pb.GeneratedMessage {
@@ -409,70 +409,6 @@ class Expense extends $pb.GeneratedMessage {
   void clearDate() => clearField(5);
 }
 
-class ReturnMsg extends $pb.GeneratedMessage {
-  factory ReturnMsg({
-    $core.int? code,
-    $core.String? msg,
-  }) {
-    final $result = create();
-    if (code != null) {
-      $result.code = code;
-    }
-    if (msg != null) {
-      $result.msg = msg;
-    }
-    return $result;
-  }
-  ReturnMsg._() : super();
-  factory ReturnMsg.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ReturnMsg.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReturnMsg', createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'code', $pb.PbFieldType.O3)
-    ..aOS(2, _omitFieldNames ? '' : 'msg')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ReturnMsg clone() => ReturnMsg()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ReturnMsg copyWith(void Function(ReturnMsg) updates) => super.copyWith((message) => updates(message as ReturnMsg)) as ReturnMsg;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static ReturnMsg create() => ReturnMsg._();
-  ReturnMsg createEmptyInstance() => create();
-  static $pb.PbList<ReturnMsg> createRepeated() => $pb.PbList<ReturnMsg>();
-  @$core.pragma('dart2js:noInline')
-  static ReturnMsg getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReturnMsg>(create);
-  static ReturnMsg? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.int get code => $_getIZ(0);
-  @$pb.TagNumber(1)
-  set code($core.int v) { $_setSignedInt32(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasCode() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearCode() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get msg => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set msg($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasMsg() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearMsg() => clearField(2);
-}
-
 class ListExpensesResponse extends $pb.GeneratedMessage {
   factory ListExpensesResponse({
     $core.Iterable<Expense>? expenses,
@@ -572,14 +508,14 @@ class UpdateExpenseRequest extends $pb.GeneratedMessage {
 class UpdateExpenseResponse extends $pb.GeneratedMessage {
   factory UpdateExpenseResponse({
     $core.int? id,
-    ReturnMsg? returnMsg,
+    SuccessStatus? status,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
     }
-    if (returnMsg != null) {
-      $result.returnMsg = returnMsg;
+    if (status != null) {
+      $result.status = status;
     }
     return $result;
   }
@@ -589,7 +525,7 @@ class UpdateExpenseResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateExpenseResponse', createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.O3)
-    ..aOM<ReturnMsg>(2, _omitFieldNames ? '' : 'returnMsg', subBuilder: ReturnMsg.create)
+    ..aOM<SuccessStatus>(2, _omitFieldNames ? '' : 'status', subBuilder: SuccessStatus.create)
     ..hasRequiredFields = false
   ;
 
@@ -624,15 +560,15 @@ class UpdateExpenseResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  ReturnMsg get returnMsg => $_getN(1);
+  SuccessStatus get status => $_getN(1);
   @$pb.TagNumber(2)
-  set returnMsg(ReturnMsg v) { setField(2, v); }
+  set status(SuccessStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasReturnMsg() => $_has(1);
+  $core.bool hasStatus() => $_has(1);
   @$pb.TagNumber(2)
-  void clearReturnMsg() => clearField(2);
+  void clearStatus() => clearField(2);
   @$pb.TagNumber(2)
-  ReturnMsg ensureReturnMsg() => $_ensure(1);
+  SuccessStatus ensureStatus() => $_ensure(1);
 }
 
 class DeleteExpenseRequest extends $pb.GeneratedMessage {
@@ -688,14 +624,14 @@ class DeleteExpenseRequest extends $pb.GeneratedMessage {
 class DeleteExpenseResponse extends $pb.GeneratedMessage {
   factory DeleteExpenseResponse({
     $core.int? id,
-    ReturnMsg? returnMsg,
+    SuccessStatus? status,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
     }
-    if (returnMsg != null) {
-      $result.returnMsg = returnMsg;
+    if (status != null) {
+      $result.status = status;
     }
     return $result;
   }
@@ -705,7 +641,7 @@ class DeleteExpenseResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteExpenseResponse', createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.O3)
-    ..aOM<ReturnMsg>(2, _omitFieldNames ? '' : 'returnMsg', subBuilder: ReturnMsg.create)
+    ..aOM<SuccessStatus>(2, _omitFieldNames ? '' : 'status', subBuilder: SuccessStatus.create)
     ..hasRequiredFields = false
   ;
 
@@ -740,15 +676,79 @@ class DeleteExpenseResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  ReturnMsg get returnMsg => $_getN(1);
+  SuccessStatus get status => $_getN(1);
   @$pb.TagNumber(2)
-  set returnMsg(ReturnMsg v) { setField(2, v); }
+  set status(SuccessStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasReturnMsg() => $_has(1);
+  $core.bool hasStatus() => $_has(1);
   @$pb.TagNumber(2)
-  void clearReturnMsg() => clearField(2);
+  void clearStatus() => clearField(2);
   @$pb.TagNumber(2)
-  ReturnMsg ensureReturnMsg() => $_ensure(1);
+  SuccessStatus ensureStatus() => $_ensure(1);
+}
+
+class SuccessStatus extends $pb.GeneratedMessage {
+  factory SuccessStatus({
+    $core.int? code,
+    $core.String? msg,
+  }) {
+    final $result = create();
+    if (code != null) {
+      $result.code = code;
+    }
+    if (msg != null) {
+      $result.msg = msg;
+    }
+    return $result;
+  }
+  SuccessStatus._() : super();
+  factory SuccessStatus.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SuccessStatus.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SuccessStatus', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'code', $pb.PbFieldType.O3)
+    ..aOS(2, _omitFieldNames ? '' : 'msg')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  SuccessStatus clone() => SuccessStatus()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  SuccessStatus copyWith(void Function(SuccessStatus) updates) => super.copyWith((message) => updates(message as SuccessStatus)) as SuccessStatus;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static SuccessStatus create() => SuccessStatus._();
+  SuccessStatus createEmptyInstance() => create();
+  static $pb.PbList<SuccessStatus> createRepeated() => $pb.PbList<SuccessStatus>();
+  @$core.pragma('dart2js:noInline')
+  static SuccessStatus getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SuccessStatus>(create);
+  static SuccessStatus? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get code => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set code($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasCode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCode() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get msg => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set msg($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMsg() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsg() => clearField(2);
 }
 
 

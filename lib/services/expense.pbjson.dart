@@ -53,14 +53,14 @@ const CreateExpenseResponse$json = {
   '1': 'CreateExpenseResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
-    {'1': 'return_msg', '3': 2, '4': 1, '5': 11, '6': '.ReturnMsg', '10': 'returnMsg'},
+    {'1': 'status', '3': 2, '4': 1, '5': 11, '6': '.SuccessStatus', '10': 'status'},
   ],
 };
 
 /// Descriptor for `CreateExpenseResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createExpenseResponseDescriptor = $convert.base64Decode(
-    'ChVDcmVhdGVFeHBlbnNlUmVzcG9uc2USDgoCaWQYASABKAVSAmlkEikKCnJldHVybl9tc2cYAi'
-    'ABKAsyCi5SZXR1cm5Nc2dSCXJldHVybk1zZw==');
+    'ChVDcmVhdGVFeHBlbnNlUmVzcG9uc2USDgoCaWQYASABKAVSAmlkEiYKBnN0YXR1cxgCIAEoCz'
+    'IOLlN1Y2Nlc3NTdGF0dXNSBnN0YXR1cw==');
 
 @$core.Deprecated('Use getExpenseRequestDescriptor instead')
 const GetExpenseRequest$json = {
@@ -79,14 +79,14 @@ const GetExpenseResponse$json = {
   '1': 'GetExpenseResponse',
   '2': [
     {'1': 'expense', '3': 1, '4': 1, '5': 11, '6': '.Expense', '10': 'expense'},
-    {'1': 'return_msg', '3': 2, '4': 1, '5': 11, '6': '.ReturnMsg', '10': 'returnMsg'},
+    {'1': 'status', '3': 2, '4': 1, '5': 11, '6': '.SuccessStatus', '10': 'status'},
   ],
 };
 
 /// Descriptor for `GetExpenseResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getExpenseResponseDescriptor = $convert.base64Decode(
     'ChJHZXRFeHBlbnNlUmVzcG9uc2USIgoHZXhwZW5zZRgBIAEoCzIILkV4cGVuc2VSB2V4cGVuc2'
-    'USKQoKcmV0dXJuX21zZxgCIAEoCzIKLlJldHVybk1zZ1IJcmV0dXJuTXNn');
+    'USJgoGc3RhdHVzGAIgASgLMg4uU3VjY2Vzc1N0YXR1c1IGc3RhdHVz');
 
 @$core.Deprecated('Use listExpensesRequestDescriptor instead')
 const ListExpensesRequest$json = {
@@ -117,19 +117,6 @@ final $typed_data.Uint8List expenseDescriptor = $convert.base64Decode(
     'CgdFeHBlbnNlEg4KAmlkGAEgASgFUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSFgoGYW1vdW'
     '50GAMgASgBUgZhbW91bnQSLAoIY2F0ZWdvcnkYBCABKA4yEC5FeHBlbnNlQ2F0ZWdvcnlSCGNh'
     'dGVnb3J5EhIKBGRhdGUYBSABKAlSBGRhdGU=');
-
-@$core.Deprecated('Use returnMsgDescriptor instead')
-const ReturnMsg$json = {
-  '1': 'ReturnMsg',
-  '2': [
-    {'1': 'code', '3': 1, '4': 1, '5': 5, '10': 'code'},
-    {'1': 'msg', '3': 2, '4': 1, '5': 9, '10': 'msg'},
-  ],
-};
-
-/// Descriptor for `ReturnMsg`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List returnMsgDescriptor = $convert.base64Decode(
-    'CglSZXR1cm5Nc2cSEgoEY29kZRgBIAEoBVIEY29kZRIQCgNtc2cYAiABKAlSA21zZw==');
 
 @$core.Deprecated('Use listExpensesResponseDescriptor instead')
 const ListExpensesResponse$json = {
@@ -162,14 +149,14 @@ const UpdateExpenseResponse$json = {
   '1': 'UpdateExpenseResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
-    {'1': 'return_msg', '3': 2, '4': 1, '5': 11, '6': '.ReturnMsg', '10': 'returnMsg'},
+    {'1': 'status', '3': 2, '4': 1, '5': 11, '6': '.SuccessStatus', '10': 'status'},
   ],
 };
 
 /// Descriptor for `UpdateExpenseResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateExpenseResponseDescriptor = $convert.base64Decode(
-    'ChVVcGRhdGVFeHBlbnNlUmVzcG9uc2USDgoCaWQYASABKAVSAmlkEikKCnJldHVybl9tc2cYAi'
-    'ABKAsyCi5SZXR1cm5Nc2dSCXJldHVybk1zZw==');
+    'ChVVcGRhdGVFeHBlbnNlUmVzcG9uc2USDgoCaWQYASABKAVSAmlkEiYKBnN0YXR1cxgCIAEoCz'
+    'IOLlN1Y2Nlc3NTdGF0dXNSBnN0YXR1cw==');
 
 @$core.Deprecated('Use deleteExpenseRequestDescriptor instead')
 const DeleteExpenseRequest$json = {
@@ -188,12 +175,25 @@ const DeleteExpenseResponse$json = {
   '1': 'DeleteExpenseResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
-    {'1': 'return_msg', '3': 2, '4': 1, '5': 11, '6': '.ReturnMsg', '10': 'returnMsg'},
+    {'1': 'status', '3': 2, '4': 1, '5': 11, '6': '.SuccessStatus', '10': 'status'},
   ],
 };
 
 /// Descriptor for `DeleteExpenseResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List deleteExpenseResponseDescriptor = $convert.base64Decode(
-    'ChVEZWxldGVFeHBlbnNlUmVzcG9uc2USDgoCaWQYASABKAVSAmlkEikKCnJldHVybl9tc2cYAi'
-    'ABKAsyCi5SZXR1cm5Nc2dSCXJldHVybk1zZw==');
+    'ChVEZWxldGVFeHBlbnNlUmVzcG9uc2USDgoCaWQYASABKAVSAmlkEiYKBnN0YXR1cxgCIAEoCz'
+    'IOLlN1Y2Nlc3NTdGF0dXNSBnN0YXR1cw==');
+
+@$core.Deprecated('Use successStatusDescriptor instead')
+const SuccessStatus$json = {
+  '1': 'SuccessStatus',
+  '2': [
+    {'1': 'code', '3': 1, '4': 1, '5': 5, '10': 'code'},
+    {'1': 'msg', '3': 2, '4': 1, '5': 9, '10': 'msg'},
+  ],
+};
+
+/// Descriptor for `SuccessStatus`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List successStatusDescriptor = $convert.base64Decode(
+    'Cg1TdWNjZXNzU3RhdHVzEhIKBGNvZGUYASABKAVSBGNvZGUSEAoDbXNnGAIgASgJUgNtc2c=');
 

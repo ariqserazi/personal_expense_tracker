@@ -32,12 +32,12 @@ class ExpenseClient {
     }
   }
 
-  Future<ReturnMsg> getExpenses(int id) async {
+  Future<SuccessStatus> getExpenses(int id) async {
     final request = GetExpenseRequest()..id = id;
 
     final response = await stub.getExpense(request);
     print('GetExpensesResponse: ${response}');
-    return response.returnMsg;
+    return response.status;
   }
 
   Future<void> listExpenses() async {
@@ -51,26 +51,20 @@ class ExpenseClient {
     }
   }
 
-  Future<void> deleteExpense(int i) async {
-    try {
-      final request = DeleteExpenseRequest()..id = i;
+  Future<SuccessStatus> deleteExpense(int i) async {
+    final request = DeleteExpenseRequest()..id = i;
 
-      final response = await stub.deleteExpense(request);
-      print('DeleteExpense: ${response}');
-    } catch (e) {
-      print('Caught error: $e');
-    }
+    final response = await stub.deleteExpense(request);
+    print('DeleteExpense: ${response}');
+    return response.status;
   }
 
-  Future<void> updateExpense(var i) async {
-    try {
-      final request = UpdateExpenseRequest()..expense = i;
+  Future<SuccessStatus> updateExpense(var i) async {
+    final request = UpdateExpenseRequest()..expense = i;
 
-      final response = await stub.updateExpense(request);
-      print('UpdateExpenseResponse: ${response}');
-    } catch (e) {
-      print('Caught error: $e');
-    }
+    final response = await stub.updateExpense(request);
+    print('UpdateExpenseResponse: ${response}');
+    return response.status;
   }
 
   Future<void> shutdown() async {
