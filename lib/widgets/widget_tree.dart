@@ -20,9 +20,7 @@ class _WidgetTreeState extends State<WidgetTree> {
   Widget build(BuildContext context) {
     List<Widget> pages = [
       HomePage(expenses: expenses),
-      SummaryPage(
-        expenses: expenses,
-      ),
+      SummaryPage(),
       ExpensePage(
         onExpenseAdded: (newExpense) {
           setState(() {
