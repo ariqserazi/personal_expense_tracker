@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:personal_expense_tracker/pages/expense_page.dart';
 import 'package:personal_expense_tracker/services/expense.pb.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
+
+String _formatDate(DateTime date) {
+  return DateFormat('yyyy-MM-dd').format(date); // Example: 2024-11-25
+}
 
 class UpdatePage extends StatefulWidget {
   final Map<String, dynamic> expense;
@@ -42,6 +47,7 @@ class UpdatePageState extends State<UpdatePage> {
     _amountController =
         TextEditingController(text: widget.expense['amount'].toString());
     _selectedCategory = widget.expense['category'];
+    _selectedDate = DateTime.parse(widget.expense['date']);
   }
 
   // List<Expense> _expenses = [];
@@ -127,8 +133,10 @@ class UpdatePageState extends State<UpdatePage> {
               children: [
                 Text(
                   _selectedDate == null
-                      ? 'No date selected'
-                      : 'Date: ${_selectedDate!.toLocal()}'.split(' ')[0],
+                      ? (widget.expense['date'] != null
+                          ? '${_formatDate(DateTime.parse(widget.expense['date']))}'
+                          : 'No date available')
+                      : 'Date: ${_formatDate(_selectedDate!)}',
                 ),
                 const Spacer(),
                 ElevatedButton(
@@ -156,6 +164,7 @@ class UpdatePageState extends State<UpdatePage> {
                           _selectedDate!.toLocal().toString().split(' ')[0];
                     final client = ExpenseClient();
                     // expense.id = widget.expense['id'];
+                    print(expense);
                     await client.updateExpense(expense);
                   }
                   Navigator.pop(context);

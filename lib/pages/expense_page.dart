@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:personal_expense_tracker/pages/home_page.dart';
 import 'package:personal_expense_tracker/services/expense.pbgrpc.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
+import 'package:personal_expense_tracker/widgets/widget_tree.dart';
 
 String _formatDate(DateTime date) {
   return DateFormat('yyyy-MM-dd').format(date); // Example: 2024-11-25
@@ -99,7 +101,7 @@ class _ExpensePageState extends State<ExpensePage> {
                 Text(
                   _selectedDate == null
                       ? 'No date selected'
-                      : 'Date: ${_selectedDate!.toLocal()}'.split(' ')[0],
+                      : 'Date:  ${_formatDate(_selectedDate!)}',
                 ),
                 const Spacer(),
                 ElevatedButton(
@@ -140,6 +142,7 @@ class _ExpensePageState extends State<ExpensePage> {
                       _selectedDate = null;
                       _selectedCategory = 'UNKNOWN';
                     });
+                    // Navigator.push(())
                   }
                 },
                 child: const Text('Add Expense'),

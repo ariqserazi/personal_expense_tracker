@@ -8,7 +8,7 @@ class ExpenseClient {
 
   ExpenseClient() {
     channel = ClientChannel(
-      '10.0.0.31', //'localhost', 54.226.152.43, 10.0.0.31
+      '10.0.0.26', //'localhost', 54.226.152.43, 10.0.0.26
       port: 50051,
       options: const ChannelOptions(
         credentials: ChannelCredentials.insecure(),
@@ -59,8 +59,8 @@ class ExpenseClient {
     return response.status;
   }
 
-  Future<SuccessStatus> updateExpense(var i) async {
-    final request = UpdateExpenseRequest()..expense = i;
+  Future<SuccessStatus> updateExpense(var expense) async {
+    final request = UpdateExpenseRequest(expense: expense);
 
     final response = await stub.updateExpense(request);
     print('UpdateExpenseResponse: ${response}');
@@ -82,20 +82,20 @@ void main() async {
       category: ExpenseCategory.ENTERTAINMENT,
       date: "12-06-2922");
   final expense1 = Expense(
-      title: "Movie Tickets",
+      title: "bills",
       amount: 20.00,
-      category: ExpenseCategory.ENTERTAINMENT,
+      category: ExpenseCategory.FOOD,
       date: "12-06-2922");
   await client.createExpenses(expense1);
 
-  await client.listExpenses();
+  // await client.listExpenses();
 
-  final returnMessage = await client.getExpenses(10);
-  print('${returnMessage}');
-  await client.listExpenses();
-  await client.deleteExpense(11);
-  await client.listExpenses();
-  await client.updateExpense(expense);
+  // final returnMessage = await client.getExpenses(10);
+  // print('${returnMessage}');
+  // await client.listExpenses();
+  // await client.deleteExpense(11);
+  // await client.listExpenses();
+  // await client.updateExpense(expense);
 
   await client.shutdown();
 }

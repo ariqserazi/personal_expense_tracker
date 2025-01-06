@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart' as grpc;
+import 'package:personal_expense_tracker/pages/summary_page.dart';
 import 'package:personal_expense_tracker/pages/update_page.dart';
-import 'package:personal_expense_tracker/services/expense.pb.dart';
+import '/services/expense.pb.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
+import 'constants.dart';
 
 class HomePage extends StatefulWidget {
   final List<Map<String, dynamic>> expenses;
@@ -113,27 +115,38 @@ class _HomePageState extends State<HomePage> {
 
           final expenses = snapshot.data!;
           return ListView.builder(
+            padding: const EdgeInsets.all(20.0),
             itemCount: expenses.length,
             itemBuilder: (context, index) {
               final expense = expenses[index];
-              return ListTile(
-                title: Text(expense['title']),
-                subtitle: Text(
-                  'Amount: \$${expense['amount']} | Category: ${expense['category']} | Date: ${expense['date']}',
-                ),
-                trailing: PopupMenuButton<String>(
-                  onSelected: (option) => _onOptionSelected(option, expense),
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                    const PopupMenuItem<String>(
-                      value: 'Edit',
-                      child: Text('Edit'),
-                    ),
-                    const PopupMenuItem<String>(
-                      value: 'Delete',
-                      child: Text('Delete'),
-                    ),
-                  ],
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: getColor(expense['category']),
+                    child: Text(expense['category'][0]),
+                  ),
+                  title: Text(expense['title']),
+                  subtitle: Text(
+                    'Amount: \$${expense['amount']} | Category: ${expense['category']} | Date: ${expense['date']}',
+                  ),
+                  trailing: PopupMenuButton<String>(
+                    onSelected: (option) => _onOptionSelected(option, expense),
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'Edit',
+                        child: Text('Edit'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'Delete',
+                        child: Text('Delete'),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
