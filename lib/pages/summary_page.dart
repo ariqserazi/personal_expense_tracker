@@ -67,23 +67,131 @@ class _SummaryPageState extends State<SummaryPage> {
                     radius: 50,
                   ))
               .toList();
+          // Convert data to bar chart sections
+          List<BarChartGroupData> barGroups = categoryTotals.entries
+              .map((entry) => BarChartGroupData(
+                    x: categoryTotals.keys
+                        .toList()
+                        .indexOf(entry.key), // Position on the X-axis
+                    barRods: [
+                      BarChartRodData(
+                        toY: entry.value, // Height of the bar
+                        color: _getColor(entry.key), // Bar color
+                        width: 15, // Bar width
+                      ),
+                    ],
+                  ))
+              .toList();
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: PieChart(
-                    PieChartData(
-                      sections: pieSections,
-                      centerSpaceRadius: 40,
-                      sectionsSpace: 2,
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: const [
+                      Tab(icon: Icon(Icons.pie_chart), text: "Pie Chart"),
+                      Tab(icon: Icon(Icons.bar_chart), text: "Bar Chart"),
+                    ],
+                    labelColor: Colors.green[700],
+                    unselectedLabelColor: Colors.grey,
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // Pie Chart
+                        Column(
+                          children: [
+                            Expanded(
+                              child: PieChart(
+                                PieChartData(
+                                  sections: pieSections,
+                                  centerSpaceRadius: 40,
+                                  sectionsSpace: 2,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildLegend(categoryTotals),
+                          ],
+                        ),
+                        // Bar Chart
+                        Column(
+                          children: [
+                            Expanded(
+                              child: BarChart(
+                                BarChartData(
+                                  barGroups: barGroups,
+                                  titlesData: FlTitlesData(
+                                    leftTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 40,
+                                        getTitlesWidget: (value, meta) {
+                                          return Text(
+                                            value.toString(),
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        getTitlesWidget: (value, meta) {
+                                          final index = value.toInt();
+                                          if (index < 0 ||
+                                              index >=
+                                                  categoryTotals.keys.length) {
+                                            return const SizedBox.shrink();
+                                          }
+                                          return Text(
+                                            categoryTotals.keys
+                                                .elementAt(index),
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    topTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles:
+                                            true, // Keep the placeholders visible
+                                        getTitlesWidget: (value, meta) {
+                                          return const Text(
+                                            '', // Empty text to make them invisible
+                                            style: TextStyle(
+                                                fontSize:
+                                                    0), // Optionally set font size to 0
+                                          );
+                                        },
+                                        reservedSize:
+                                            20, // Adjust this to match the space needed
+                                      ),
+                                    ),
+                                    rightTitles: const AxisTitles(
+                                      sideTitles: SideTitles(
+                                          showTitles:
+                                              false), // Disable right titles (optional)
+                                    ),
+                                  ),
+                                  borderData: FlBorderData(show: false),
+                                  gridData: const FlGridData(show: false),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildLegend(categoryTotals),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                _buildLegend(categoryTotals),
-              ],
+                ],
+              ),
             ),
           );
         },

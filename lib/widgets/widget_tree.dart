@@ -19,7 +19,10 @@ class _WidgetTreeState extends State<WidgetTree> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      HomePage(expenses: expenses),
+      HomePage(
+        expenses: expenses,
+        onExpensesUpdated: (List<Map<String, dynamic>> expenses) {},
+      ),
       SummaryPage(),
       ExpensePage(
         onExpenseAdded: (newExpense) {

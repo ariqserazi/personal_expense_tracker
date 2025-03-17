@@ -8,7 +8,7 @@ class ExpenseClient {
 
   ExpenseClient() {
     channel = ClientChannel(
-      '10.0.0.26', //'localhost', 54.226.152.43, 10.0.0.26
+      '10.0.0.29', //'localhost', 54.226.152.43, 10.0.0.26
       port: 50051,
       options: const ChannelOptions(
         credentials: ChannelCredentials.insecure(),
