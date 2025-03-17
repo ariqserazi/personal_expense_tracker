@@ -92,7 +92,7 @@ The **Personal Expense Tracker** is licensed under the **MIT License**. Feel fre
 
 ### Contributors
 
-- **Your Name** - Development & Maintenance
+- **Ariq Serazi** - Development & Maintenance
 
 For contributions, please fork the repository and submit a pull request!
 
