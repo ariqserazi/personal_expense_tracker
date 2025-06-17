@@ -35,7 +35,7 @@ The **Personal Expense Tracker** is a fully functional mobile application that a
       title TEXT NOT NULL,
       amount REAL NOT NULL,
       category TEXT NOT NULL,
-      date DATE NOT NULL
+      date TIMESTAMP NOT NULL
   );
   ```
 - Efficient CRUD operations enable seamless data management.
