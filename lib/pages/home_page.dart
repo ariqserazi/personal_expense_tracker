@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:personal_expense_tracker/pages/summary_page.dart';
 import 'package:personal_expense_tracker/pages/update_page.dart';
+import 'package:personal_expense_tracker/services/google/protobuf/timestamp.pb.dart';
 import '/services/expense.pb.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
 import 'constants.dart';
@@ -39,6 +40,10 @@ class _HomePageState extends State<HomePage> {
     _fetchExpensesFromServer();
   }
 
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
   void _filterExpenses1() {
     setState(() {
       // Your filtering logic
@@ -55,7 +60,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<Map<String, dynamic>>> _fetchExpensesFromServer1() async {
     final client = ExpenseClient();
     try {
-      final request = ListExpensesRequest()..date = "";
+      final request = ListExpensesRequest()..date = Timestamp();
       final response = await client.stub.listExpenses(request);
       // final response = await client.listExpenses();
       return response.expenses.map((expense) {
@@ -237,7 +242,7 @@ class _HomePageState extends State<HomePage> {
           _endDate != null) {
         // Custom range filtering
         _expenses = widget.expenses.where((expense) {
-          final expenseDate = _parseDate(expense['date']);
+          final expenseDate = (expense['date'] as Timestamp).toDateTime();
           return expenseDate != null &&
               expenseDate.isAfter(_startDate!) &&
               expenseDate.isBefore(_endDate!
@@ -246,7 +251,7 @@ class _HomePageState extends State<HomePage> {
       } else if (_selectedFilter == 'Day') {
         // Specific day filtering
         _expenses = widget.expenses.where((expense) {
-          final expenseDate = _parseDate(expense['date']);
+          final expenseDate = (expense['date'] as Timestamp).toDateTime();
           return expenseDate != null &&
               expenseDate.year == _startDate?.year &&
               expenseDate.month == _startDate?.month &&
@@ -255,7 +260,7 @@ class _HomePageState extends State<HomePage> {
       } else if (_selectedFilter == 'Month') {
         // Specific month filtering
         _expenses = widget.expenses.where((expense) {
-          final expenseDate = _parseDate(expense['date']);
+          final expenseDate = (expense['date'] as Timestamp).toDateTime();
           return expenseDate != null &&
               expenseDate.year == _startDate?.year &&
               expenseDate.month == _startDate?.month;
@@ -271,14 +276,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  DateTime? _parseDate(String dateStr) {
+  DateTime? _parseDate(dynamic date) {
     try {
-      // print(dateStr);
-      return DateTime.parse(dateStr);
+      if (date is Timestamp) {
+        return date.toDateTime();
+      } else if (date is String) {
+        return DateTime.parse(date);
+      }
     } catch (e) {
       print('Error parsing date: $e');
-      return null; // Return null if parsing fails
     }
+    return null;
   }
 
   List<Map<String, dynamic>> _applyFilter(
@@ -289,7 +297,7 @@ class _HomePageState extends State<HomePage> {
     } else if (_selectedFilter == 'Day' && _startDate != null) {
       // Filter for a specific day
       return allExpenses.where((expense) {
-        final expenseDate = DateTime.parse(expense['date']); // Parse VARCHAR
+        final expenseDate = (expense['date'] as Timestamp).toDateTime();
         return expenseDate.year == _startDate!.year &&
             expenseDate.month == _startDate!.month &&
             expenseDate.day == _startDate!.day;
@@ -297,14 +305,14 @@ class _HomePageState extends State<HomePage> {
     } else if (_selectedFilter == 'Month' && _startDate != null) {
       // Filter for a specific month
       return allExpenses.where((expense) {
-        final expenseDate = DateTime.parse(expense['date']); // Parse VARCHAR
+        final expenseDate = (expense['date'] as Timestamp).toDateTime();
         return expenseDate.year == _startDate!.year &&
             expenseDate.month == _startDate!.month;
       }).toList();
     } else if (_selectedFilter == 'Year' && _startDate != null) {
       // Filter for a specific year
       return allExpenses.where((expense) {
-        final expenseDate = DateTime.parse(expense['date']); // Parse VARCHAR
+        final expenseDate = (expense['date'] as Timestamp).toDateTime();
         return expenseDate.year == _startDate!.year;
       }).toList();
     } else if (_selectedFilter == 'Custom' &&
@@ -312,7 +320,7 @@ class _HomePageState extends State<HomePage> {
         _endDate != null) {
       // Custom range filter
       return allExpenses.where((expense) {
-        final expenseDate = DateTime.parse(expense['date']); // Parse VARCHAR
+        final expenseDate = (expense['date'] as Timestamp).toDateTime();
         return expenseDate.isAfter(_startDate!) &&
             expenseDate.isBefore(_endDate!
                 .add(const Duration(days: 1))); // Inclusive of the end date
@@ -366,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         title: Text(expense['title']),
                         subtitle: Text(
-                          'Amount: \$${expense['amount']} | Category: ${expense['category']} | Date: ${expense['date']}',
+                          'Amount: \$${expense['amount']} | Category: ${expense['category']} | Date: ${_formatDate((expense['date'] as Timestamp).toDateTime())}',
                         ),
                         trailing: PopupMenuButton<String>(
                           onSelected: (option) =>

@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_expense_tracker/pages/home_page.dart';
 import 'package:personal_expense_tracker/services/expense.pbgrpc.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
-import 'package:personal_expense_tracker/widgets/widget_tree.dart';
+import 'package:personal_expense_tracker/services/google/protobuf/timestamp.pb.dart';
 
 String _formatDate(DateTime date) {
-  return DateFormat('yyyy-MM-dd').format(date); // Example: 2024-11-25
+  return DateFormat('yyyy-MM-dd').format(date);
 }
 
 class ExpensePage extends StatefulWidget {
-  final Function(Map<String, dynamic>)
-      onExpenseAdded; // Callback for new expense
+  final Function(Map<String, dynamic>) onExpenseAdded;
 
-  ExpensePage({required this.onExpenseAdded, Key? key}) : super(key: key);
+  const ExpensePage({required this.onExpenseAdded, Key? key}) : super(key: key);
 
   @override
   State<ExpensePage> createState() => _ExpensePageState();
@@ -22,8 +20,9 @@ class ExpensePage extends StatefulWidget {
 class _ExpensePageState extends State<ExpensePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-  String _selectedCategory = 'UNKNOWN'; // Default category
+  String _selectedCategory = 'UNKNOWN';
   DateTime? _selectedDate;
+
   void _pickDate() async {
     final pickedDate = await showDatePicker(
       context: context,
@@ -35,10 +34,40 @@ class _ExpensePageState extends State<ExpensePage> {
       setState(() {
         _selectedDate = pickedDate;
       });
-      print('Selected date: $_selectedDate');
-    } else {
-      print('No date selected.');
     }
+  }
+
+  Future<void> _submitExpense() async {
+    final title = _titleController.text.trim();
+    final amount = double.tryParse(_amountController.text.trim());
+    final date = _selectedDate;
+
+    if (title.isEmpty || amount == null || date == null) return;
+
+    final timestamp = Timestamp.fromDateTime(date);
+
+    final expense = Expense()
+      ..title = title
+      ..amount = amount
+      ..category = ExpenseCategoryExtension.fromString(_selectedCategory)
+      ..date = timestamp;
+
+    final client = ExpenseClient();
+    await client.createExpenses(expense);
+
+    widget.onExpenseAdded({
+      'title': title,
+      'amount': amount,
+      'category': _selectedCategory,
+      'date': timestamp,
+    });
+
+    _titleController.clear();
+    _amountController.clear();
+    setState(() {
+      _selectedDate = null;
+      _selectedCategory = 'UNKNOWN';
+    });
   }
 
   @override
@@ -55,17 +84,13 @@ class _ExpensePageState extends State<ExpensePage> {
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Expense',
-              ),
+              decoration: const InputDecoration(labelText: 'Expense'),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Amount',
-              ),
+              decoration: const InputDecoration(labelText: 'Amount'),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -79,30 +104,26 @@ class _ExpensePageState extends State<ExpensePage> {
                 'BILLS',
                 'EDUCATION',
                 'HEALTH',
-                'OTHER'
-              ]
-                  .map((category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      ))
-                  .toList(),
+                'OTHER',
+              ].map((category) {
+                return DropdownMenuItem(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),
               onChanged: (value) {
                 setState(() {
                   _selectedCategory = value!;
                 });
               },
-              decoration: const InputDecoration(
-                labelText: 'Category',
-              ),
+              decoration: const InputDecoration(labelText: 'Category'),
             ),
             const SizedBox(height: 16),
             Row(
               children: [
-                Text(
-                  _selectedDate == null
-                      ? 'No date selected'
-                      : 'Date:  ${_formatDate(_selectedDate!)}',
-                ),
+                Text(_selectedDate == null
+                    ? 'No date selected'
+                    : 'Date: ${_formatDate(_selectedDate!)}'),
                 const Spacer(),
                 ElevatedButton(
                   onPressed: _pickDate,
@@ -113,38 +134,7 @@ class _ExpensePageState extends State<ExpensePage> {
             const SizedBox(height: 16),
             Center(
               child: ElevatedButton(
-                onPressed: () async {
-                  final titletext = _titleController.text.trim();
-                  final amount = double.tryParse(_amountController.text.trim());
-                  if (titletext.isNotEmpty &&
-                      amount != null &&
-                      _selectedDate != null) {
-                    widget.onExpenseAdded({
-                      'title': titletext,
-                      'amount': amount,
-                      'category': _selectedCategory,
-                      'date': _selectedDate!.toLocal().toString().split(' ')[0],
-                    });
-                    Expense expense = Expense()
-                      ..title = _titleController.text.trim()
-                      ..amount = double.tryParse(_amountController.text.trim())!
-                      ..category =
-                          ExpenseCategoryExtension.fromString(_selectedCategory)
-                      ..date =
-                          _selectedDate!.toLocal().toString().split(' ')[0];
-                    final client = ExpenseClient();
-
-                    await client.createExpenses(expense);
-
-                    _titleController.clear();
-                    _amountController.clear();
-                    setState(() {
-                      _selectedDate = null;
-                      _selectedCategory = 'UNKNOWN';
-                    });
-                    // Navigator.push(())
-                  }
-                },
+                onPressed: _submitExpense,
                 child: const Text('Add Expense'),
               ),
             ),
@@ -155,9 +145,12 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 }
 
+// 🔧 Fix: add all missing cases, including 'UNKNOWN'
 extension ExpenseCategoryExtension on ExpenseCategory {
   static ExpenseCategory fromString(String category) {
-    switch (category) {
+    switch (category.toUpperCase()) {
+      case 'UNKNOWN':
+        return ExpenseCategory.UNKNOWN;
       case 'FOOD':
         return ExpenseCategory.FOOD;
       case 'TRANSPORT':
@@ -168,6 +161,10 @@ extension ExpenseCategoryExtension on ExpenseCategory {
         return ExpenseCategory.ENTERTAINMENT;
       case 'BILLS':
         return ExpenseCategory.BILLS;
+      case 'EDUCATION':
+        return ExpenseCategory.EDUCATION;
+      case 'HEALTH':
+        return ExpenseCategory.HEALTH;
       case 'OTHER':
         return ExpenseCategory.OTHER;
       default:

@@ -2,12 +2,13 @@
 //  Generated code. Do not modify.
 //  source: expense.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -92,13 +93,14 @@ final $typed_data.Uint8List getExpenseResponseDescriptor = $convert.base64Decode
 const ListExpensesRequest$json = {
   '1': 'ListExpensesRequest',
   '2': [
-    {'1': 'date', '3': 1, '4': 1, '5': 9, '10': 'date'},
+    {'1': 'date', '3': 1, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'date'},
   ],
 };
 
 /// Descriptor for `ListExpensesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listExpensesRequestDescriptor = $convert.base64Decode(
-    'ChNMaXN0RXhwZW5zZXNSZXF1ZXN0EhIKBGRhdGUYASABKAlSBGRhdGU=');
+    'ChNMaXN0RXhwZW5zZXNSZXF1ZXN0Ei4KBGRhdGUYASABKAsyGi5nb29nbGUucHJvdG9idWYuVG'
+    'ltZXN0YW1wUgRkYXRl');
 
 @$core.Deprecated('Use expenseDescriptor instead')
 const Expense$json = {
@@ -108,7 +110,7 @@ const Expense$json = {
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'amount', '3': 3, '4': 1, '5': 1, '10': 'amount'},
     {'1': 'category', '3': 4, '4': 1, '5': 14, '6': '.ExpenseCategory', '10': 'category'},
-    {'1': 'date', '3': 5, '4': 1, '5': 9, '10': 'date'},
+    {'1': 'date', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'date'},
   ],
 };
 
@@ -116,7 +118,7 @@ const Expense$json = {
 final $typed_data.Uint8List expenseDescriptor = $convert.base64Decode(
     'CgdFeHBlbnNlEg4KAmlkGAEgASgFUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSFgoGYW1vdW'
     '50GAMgASgBUgZhbW91bnQSLAoIY2F0ZWdvcnkYBCABKA4yEC5FeHBlbnNlQ2F0ZWdvcnlSCGNh'
-    'dGVnb3J5EhIKBGRhdGUYBSABKAlSBGRhdGU=');
+    'dGVnb3J5Ei4KBGRhdGUYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgRkYXRl');
 
 @$core.Deprecated('Use listExpensesResponseDescriptor instead')
 const ListExpensesResponse$json = {

@@ -1,6 +1,8 @@
 import 'package:grpc/grpc.dart';
 import 'expense.pbgrpc.dart';
 import 'dart:math';
+// import 'package:personal_expense_tracker/services/google/protobuf/timestamp.pb.dart';
+import 'google/protobuf/timestamp.pb.dart' as timestamp;
 
 class ExpenseClient {
   late ClientChannel channel;
@@ -8,7 +10,7 @@ class ExpenseClient {
 
   ExpenseClient() {
     channel = ClientChannel(
-      '10.0.0.29', //'localhost', 54.226.152.43, 10.0.0.26
+      '10.0.0.32', //'localhost', 54.226.152.43, 10.0.0.26
       port: 50051,
       options: const ChannelOptions(
         credentials: ChannelCredentials.insecure(),
@@ -42,7 +44,7 @@ class ExpenseClient {
 
   Future<void> listExpenses() async {
     try {
-      final request = ListExpensesRequest()..date = "";
+      final request = ListExpensesRequest()..date = timestamp.Timestamp();
 
       final response = await stub.listExpenses(request);
       print('ListExpensesResponse: ${response.expenses}');
@@ -74,18 +76,20 @@ class ExpenseClient {
 
 void main() async {
   final client = ExpenseClient();
-
+  // final timestamp = Timestamp.fromDateTime(_selectedDate!);
   final expense = Expense(
-      id: 2,
-      title: "Movie Tickets",
-      amount: 20.00,
-      category: ExpenseCategory.ENTERTAINMENT,
-      date: "12-06-2922");
+    id: 2,
+    title: "Movie Tickets",
+    amount: 20.00,
+    category: ExpenseCategory.ENTERTAINMENT,
+    date: timestamp.Timestamp.fromDateTime(DateTime(2022, 6, 12)),
+  );
   final expense1 = Expense(
-      title: "bills",
-      amount: 20.00,
-      category: ExpenseCategory.FOOD,
-      date: "12-06-2922");
+    title: "bills",
+    amount: 20.00,
+    category: ExpenseCategory.FOOD,
+    date: timestamp.Timestamp.fromDateTime(DateTime(2022, 6, 12)),
+  );
   await client.createExpenses(expense1);
 
   // await client.listExpenses();

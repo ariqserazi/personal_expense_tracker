@@ -1,8 +1,10 @@
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
+from collections.abc import Iterable as _Iterable, Mapping as _Mapping
+from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -34,12 +36,12 @@ class CreateExpenseRequest(_message.Message):
     def __init__(self, expense: _Optional[_Union[Expense, _Mapping]] = ...) -> None: ...
 
 class CreateExpenseResponse(_message.Message):
-    __slots__ = ("id", "return_msg")
+    __slots__ = ("id", "status")
     ID_FIELD_NUMBER: _ClassVar[int]
-    RETURN_MSG_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     id: int
-    return_msg: ReturnMsg
-    def __init__(self, id: _Optional[int] = ..., return_msg: _Optional[_Union[ReturnMsg, _Mapping]] = ...) -> None: ...
+    status: SuccessStatus
+    def __init__(self, id: _Optional[int] = ..., status: _Optional[_Union[SuccessStatus, _Mapping]] = ...) -> None: ...
 
 class GetExpenseRequest(_message.Message):
     __slots__ = ("id",)
@@ -48,18 +50,18 @@ class GetExpenseRequest(_message.Message):
     def __init__(self, id: _Optional[int] = ...) -> None: ...
 
 class GetExpenseResponse(_message.Message):
-    __slots__ = ("expense", "return_msg")
+    __slots__ = ("expense", "status")
     EXPENSE_FIELD_NUMBER: _ClassVar[int]
-    RETURN_MSG_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     expense: Expense
-    return_msg: ReturnMsg
-    def __init__(self, expense: _Optional[_Union[Expense, _Mapping]] = ..., return_msg: _Optional[_Union[ReturnMsg, _Mapping]] = ...) -> None: ...
+    status: SuccessStatus
+    def __init__(self, expense: _Optional[_Union[Expense, _Mapping]] = ..., status: _Optional[_Union[SuccessStatus, _Mapping]] = ...) -> None: ...
 
 class ListExpensesRequest(_message.Message):
     __slots__ = ("date",)
     DATE_FIELD_NUMBER: _ClassVar[int]
-    date: str
-    def __init__(self, date: _Optional[str] = ...) -> None: ...
+    date: _timestamp_pb2.Timestamp
+    def __init__(self, date: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Expense(_message.Message):
     __slots__ = ("id", "title", "amount", "category", "date")
@@ -72,16 +74,8 @@ class Expense(_message.Message):
     title: str
     amount: float
     category: ExpenseCategory
-    date: str
-    def __init__(self, id: _Optional[int] = ..., title: _Optional[str] = ..., amount: _Optional[float] = ..., category: _Optional[_Union[ExpenseCategory, str]] = ..., date: _Optional[str] = ...) -> None: ...
-
-class ReturnMsg(_message.Message):
-    __slots__ = ("code", "msg")
-    CODE_FIELD_NUMBER: _ClassVar[int]
-    MSG_FIELD_NUMBER: _ClassVar[int]
-    code: int
-    msg: str
-    def __init__(self, code: _Optional[int] = ..., msg: _Optional[str] = ...) -> None: ...
+    date: _timestamp_pb2.Timestamp
+    def __init__(self, id: _Optional[int] = ..., title: _Optional[str] = ..., amount: _Optional[float] = ..., category: _Optional[_Union[ExpenseCategory, str]] = ..., date: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class ListExpensesResponse(_message.Message):
     __slots__ = ("expenses",)
@@ -96,12 +90,12 @@ class UpdateExpenseRequest(_message.Message):
     def __init__(self, expense: _Optional[_Union[Expense, _Mapping]] = ...) -> None: ...
 
 class UpdateExpenseResponse(_message.Message):
-    __slots__ = ("id", "return_msg")
+    __slots__ = ("id", "status")
     ID_FIELD_NUMBER: _ClassVar[int]
-    RETURN_MSG_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     id: int
-    return_msg: ReturnMsg
-    def __init__(self, id: _Optional[int] = ..., return_msg: _Optional[_Union[ReturnMsg, _Mapping]] = ...) -> None: ...
+    status: SuccessStatus
+    def __init__(self, id: _Optional[int] = ..., status: _Optional[_Union[SuccessStatus, _Mapping]] = ...) -> None: ...
 
 class DeleteExpenseRequest(_message.Message):
     __slots__ = ("id",)
@@ -110,9 +104,17 @@ class DeleteExpenseRequest(_message.Message):
     def __init__(self, id: _Optional[int] = ...) -> None: ...
 
 class DeleteExpenseResponse(_message.Message):
-    __slots__ = ("id", "return_msg")
+    __slots__ = ("id", "status")
     ID_FIELD_NUMBER: _ClassVar[int]
-    RETURN_MSG_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     id: int
-    return_msg: ReturnMsg
-    def __init__(self, id: _Optional[int] = ..., return_msg: _Optional[_Union[ReturnMsg, _Mapping]] = ...) -> None: ...
+    status: SuccessStatus
+    def __init__(self, id: _Optional[int] = ..., status: _Optional[_Union[SuccessStatus, _Mapping]] = ...) -> None: ...
+
+class SuccessStatus(_message.Message):
+    __slots__ = ("code", "msg")
+    CODE_FIELD_NUMBER: _ClassVar[int]
+    MSG_FIELD_NUMBER: _ClassVar[int]
+    code: int
+    msg: str
+    def __init__(self, code: _Optional[int] = ..., msg: _Optional[str] = ...) -> None: ...

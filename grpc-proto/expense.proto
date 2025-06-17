@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 option go_package = "tutorial/simple";
+import "google/protobuf/timestamp.proto";
 
 service ExpenseTracker {
   rpc CreateExpense(CreateExpenseRequest) returns (CreateExpenseResponse) {}
@@ -41,7 +42,7 @@ message GetExpenseResponse {
 }
 
 message ListExpensesRequest {
-  string date = 1;
+  google.protobuf.Timestamp date = 1;
 }
 
 message Expense {
@@ -49,7 +50,7 @@ message Expense {
   string title = 2;
   double amount = 3;
   ExpenseCategory category = 4;
-  string date = 5;
+  google.protobuf.Timestamp date = 5;
 }
 
 message ListExpensesResponse {

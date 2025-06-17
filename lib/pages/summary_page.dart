@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:personal_expense_tracker/services/expense.pb.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
 import 'package:grpc/grpc.dart' as grpc;
+import 'package:personal_expense_tracker/services/google/protobuf/timestamp.pb.dart';
 
 class SummaryPage extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _SummaryPageState extends State<SummaryPage> {
   Future<List<Map<String, dynamic>>> _fetchExpensesFromServer() async {
     final client = ExpenseClient();
     try {
-      final request = ListExpensesRequest()..date = "";
+      final request = ListExpensesRequest()..date = Timestamp();
       final response = await client.stub.listExpenses(request);
 
       return response.expenses.map((expense) {

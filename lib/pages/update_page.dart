@@ -3,9 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:personal_expense_tracker/pages/expense_page.dart';
 import 'package:personal_expense_tracker/services/expense.pb.dart';
 import 'package:personal_expense_tracker/services/expenseClient.dart';
+import 'package:personal_expense_tracker/services/google/protobuf/timestamp.pb.dart';
 
 String _formatDate(DateTime date) {
-  return DateFormat('yyyy-MM-dd').format(date); // Example: 2024-11-25
+  return DateFormat('yyyy-MM-dd').format(date);
 }
 
 class UpdatePage extends StatefulWidget {
@@ -20,12 +21,39 @@ class UpdatePage extends StatefulWidget {
 class UpdatePageState extends State<UpdatePage> {
   late TextEditingController _titleController;
   late TextEditingController _amountController;
-  late String _selectedCategory; // Default category
+  late String _selectedCategory;
   DateTime? _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.expense['title']);
+    _amountController =
+        TextEditingController(text: widget.expense['amount'].toString());
+
+    final category = widget.expense['category'];
+    if (category is String) {
+      _selectedCategory = category;
+    } else if (category is ExpenseCategory) {
+      _selectedCategory = category.name;
+    } else {
+      _selectedCategory = 'UNKNOWN';
+    }
+
+    final timestamp = widget.expense['date'];
+    if (timestamp is Timestamp) {
+      _selectedDate = timestamp.toDateTime();
+    } else if (timestamp is String) {
+      _selectedDate = DateTime.tryParse(timestamp);
+    } else {
+      _selectedDate = DateTime.now();
+    }
+  }
+
   void _pickDate() async {
     final pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -33,60 +61,47 @@ class UpdatePageState extends State<UpdatePage> {
       setState(() {
         _selectedDate = pickedDate;
       });
-      print('Selected date: $_selectedDate');
-    } else {
-      print('No date selected.');
+    }
+  }
+
+  Future<void> _handleUpdate() async {
+    final titleText = _titleController.text.trim();
+    final amount = double.tryParse(_amountController.text.trim());
+
+    if (titleText.isEmpty || amount == null || _selectedDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please complete all fields')),
+      );
+      return;
+    }
+
+    final timestamp = Timestamp.fromDateTime(_selectedDate!);
+
+    final updatedExpense = Expense()
+      ..id = widget.expense['id']
+      ..title = titleText
+      ..amount = amount
+      ..category = ExpenseCategoryExtension.fromString(_selectedCategory)
+      ..date = timestamp;
+
+    try {
+      final client = ExpenseClient();
+      await client.updateExpense(updatedExpense);
+      widget.onUpdate();
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error updating expense: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Update failed: $e')),
+      );
     }
   }
 
   @override
-  // final expense = this.expense;
-  void initState() {
-    super.initState();
-    _titleController = TextEditingController(text: widget.expense['title']);
-    _amountController =
-        TextEditingController(text: widget.expense['amount'].toString());
-    _selectedCategory = widget.expense['category'];
-    _selectedDate = DateTime.parse(widget.expense['date']);
-  }
-
-  // List<Expense> _expenses = [];
-  Future<List<Map<String, dynamic>>> _fetchExpensesFromServer() async {
-    final client = ExpenseClient();
-    try {
-      final request = ListExpensesRequest()..date = "";
-      final response = await client.stub.listExpenses(request);
-      // final response = await client.listExpenses();
-
-      return response.expenses.map((expense) {
-        return {
-          'id': expense.id,
-          'title': expense.title,
-          'amount': expense.amount,
-          'category': expense.category.name,
-          'date': expense.date,
-        };
-      }).toList();
-    } catch (e) {
-      print('Error fetching expenses: $e');
-      return [];
-    }
-  }
-
-  // Future<void> _fetchExpenses() async {
-  //   print('Calling _fetchExpenses()......');
-  //   final expenseList = await ExpenseClient().listExpenses();
-  //   setState(() {
-  //     _expenses = expenseList;
-  //   });
-  // }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Update Page for ${widget.expense['title']}",
-        ),
+        title: Text("Update: ${widget.expense['title']}"),
         backgroundColor: Colors.cyanAccent,
       ),
       body: Padding(
@@ -132,11 +147,9 @@ class UpdatePageState extends State<UpdatePage> {
             Row(
               children: [
                 Text(
-                  _selectedDate == null
-                      ? (widget.expense['date'] != null
-                          ? '${_formatDate(DateTime.parse(widget.expense['date']))}'
-                          : 'No date available')
-                      : 'Date: ${_formatDate(_selectedDate!)}',
+                  _selectedDate != null
+                      ? 'Date: ${_formatDate(_selectedDate!)}'
+                      : 'No date selected',
                 ),
                 const Spacer(),
                 ElevatedButton(
@@ -145,31 +158,10 @@ class UpdatePageState extends State<UpdatePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             Center(
               child: ElevatedButton(
-                onPressed: () async {
-                  final titletext = _titleController.text.trim();
-                  final amount = double.tryParse(_amountController.text.trim());
-                  if (titletext.isNotEmpty &&
-                      amount != null &&
-                      _selectedDate != null) {
-                    Expense expense = Expense()
-                      ..id = widget.expense['id']
-                      ..title = _titleController.text.trim()
-                      ..amount = double.tryParse(_amountController.text.trim())!
-                      ..category =
-                          ExpenseCategoryExtension.fromString(_selectedCategory)
-                      ..date =
-                          _selectedDate!.toLocal().toString().split(' ')[0];
-                    final client = ExpenseClient();
-                    // expense.id = widget.expense['id'];
-                    print(expense);
-                    await client.updateExpense(expense);
-                  }
-                  Navigator.pop(context);
-                  widget.onUpdate();
-                },
+                onPressed: _handleUpdate,
                 child: const Text('Edit Expense'),
               ),
             ),
@@ -177,5 +169,31 @@ class UpdatePageState extends State<UpdatePage> {
         ),
       ),
     );
+  }
+}
+
+extension ExpenseCategoryExtension on ExpenseCategory {
+  static ExpenseCategory fromString(String category) {
+    switch (category.toUpperCase()) {
+      case 'FOOD':
+        return ExpenseCategory.FOOD;
+      case 'TRANSPORT':
+        return ExpenseCategory.TRANSPORT;
+      case 'SHOPPING':
+        return ExpenseCategory.SHOPPING;
+      case 'ENTERTAINMENT':
+        return ExpenseCategory.ENTERTAINMENT;
+      case 'BILLS':
+        return ExpenseCategory.BILLS;
+      case 'EDUCATION':
+        return ExpenseCategory.EDUCATION;
+      case 'HEALTH':
+        return ExpenseCategory.HEALTH;
+      case 'OTHER':
+        return ExpenseCategory.OTHER;
+      case 'UNKNOWN':
+      default:
+        return ExpenseCategory.UNKNOWN;
+    }
   }
 }

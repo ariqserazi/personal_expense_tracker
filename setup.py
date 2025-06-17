@@ -1,55 +1,66 @@
 import subprocess
-import shutil
 import os
+import sys
+import platform
 
+# Define paths
+proto_file = 'grpc-proto/expense.proto'
+proto_path = 'grpc-proto'
 
-# Ensure the output directories exist
-output_dirs = [
-    'backend/python',
-    'backend/dirt',
-    'backend/go',
-    'backend/node',
-    'frontend/expense_tracker_app/lib/generated',
-    'frontend/python_cli/generated',
-    
-]
+output_dirs = {
+    'python': 'lib/backend/python',
+    'dart_frontend': 'lib/services',
+}
 
-for dir in output_dirs:
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    
-#Generate the gRPC code python server 
-subprocess.check_call([
-    'python', '-m', 'grpc_tools.protoc',
-    '-I=grpc-proto',
-    '--python_out=backend/python',
-    '--pyi_out=backend/python',
-    '--grpc_python_out=backend/python',
-    'grpc-proto/expense.proto'
-])
+# Create output directories if they don't exist
+for path in output_dirs.values():
+    os.makedirs(path, exist_ok=True)
 
-# Generate the Dart code for the frontend
-subprocess.check_call([
-    'protoc',
-    '-I=grpc-proto',
-    '--dart_out=grpc:frontend/expense_tracker_app/lib/generated',
-    'grpc-proto/expense.proto'
-])
+# Determine well-known protos include path (adjust if protoc is installed differently)
+def get_well_known_protos_path():
+    if platform.system() == 'Windows':
+        # Example default path; update if needed
+        return r'C:\Users\ariqs\local\protoc-29.1-win64\include'
 
-# Generate the Dart code for the frontend
-subprocess.check_call([
-    'protoc',
-    '-I=grpc-proto',
-    '--dart_out=grpc:backend/dirt',
-    'grpc-proto/expense.proto'
-])
+    else:
+        # Unix/macOS
+        try:
+            protoc_path = subprocess.check_output(['which', 'protoc'], text=True).strip()
+            return os.path.join(os.path.dirname(protoc_path), '../include')
+        except subprocess.CalledProcessError:
+            return '/usr/local/include'  # fallback
 
-# # Cleanup generated Python code
-# python_generated_dir = 'backend/python'
-# if os.path.exists(python_generated_dir):
-#     shutil.rmtree(python_generated_dir)
+well_known_path = get_well_known_protos_path()
 
-# # Cleanup generated Dart code
-# dart_generated_dir = 'frontend/expense_tracker_app/lib/generated'
-# if os.path.exists(dart_generated_dir):
-#     shutil.rmtree(dart_generated_dir)
+# Generate Python files
+try:
+    print("🔄 Generating Python gRPC files...")
+    subprocess.check_call([
+        'python', '-m', 'grpc_tools.protoc',
+        f'-I={proto_path}',
+        f'-I={well_known_path}',
+        f'--python_out={output_dirs["python"]}',
+        f'--pyi_out={output_dirs["python"]}',
+        f'--grpc_python_out={output_dirs["python"]}',
+        proto_file
+    ])
+    print("✅ Python gRPC files generated successfully.")
+except subprocess.CalledProcessError as e:
+    print("❌ Failed to generate Python gRPC files:")
+    print(e)
+
+# Generate Dart files
+try:
+    print("🔄 Generating Dart frontend gRPC files (including well-known types)...")
+    subprocess.check_call([
+        'protoc',
+        f'-I={proto_path}',
+        f'-I={well_known_path}',
+        '--dart_out=grpc:lib/services',
+        f'{proto_file}',
+        os.path.join(well_known_path, 'google', 'protobuf', 'timestamp.proto')
+    ])
+    print("✅ Dart frontend gRPC files generated successfully (including timestamp).")
+except subprocess.CalledProcessError as e:
+    print("❌ Failed to generate Dart gRPC files:")
+    print(e)
