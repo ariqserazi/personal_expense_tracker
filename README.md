@@ -81,7 +81,6 @@ The **Personal Expense Tracker** is a fully functional mobile application that a
 ## Future Enhancements
 
 - **User Authentication**: Allow users to track expenses individually.
-- **Export Data**: Enable exporting expense data to CSV or PDF.
 - **Analytics & Insights**: Provide insights like highest spending category or spending trends.
 
 ## License
