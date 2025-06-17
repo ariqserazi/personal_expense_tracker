@@ -103,7 +103,7 @@ class PostgresDB:
         except Exception as e:
             print(f"Delete did not work: {e}")
         finally:
-            cursor.close()
+            cursor.close() 
 
     def update(self, expense):
         cursor = self.connection.cursor()
