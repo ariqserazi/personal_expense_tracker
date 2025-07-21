@@ -18,7 +18,7 @@ The **Personal Expense Tracker** is a fully functional mobile application that a
 
 ### Backend (gRPC Server)
 
-- Built using **Python (gRPC + Protobuf)** or **Go**.
+- Built using **Python (gRPC + Protobuf)**.
 - Implements the following gRPC services:
   - **ListExpenses**: Retrieves a list of expenses for a given date.
   - **AddExpense**: Adds a new expense to the database.
@@ -44,39 +44,66 @@ The **Personal Expense Tracker** is a fully functional mobile application that a
 
 ### Prerequisites
 
-- Install **Flutter** (https://flutter.dev/docs/get-started/install)
-- Install **gRPC tools** for backend development
-- Install **SQLite** or **PostgreSQL** for database support
+- Install **Flutter**: [https://flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install)
+- Install **protoc** (Protocol Buffers compiler) and ensure it’s on your `PATH`
+- Install Python dependencies:
+  ```sh
+  pip install grpcio grpcio-tools SQLAlchemy psycopg2
+  ```
 
 ### Installation
 
-1. **Clone the Repository**:
+1. **Clone the Repository**
+
    ```sh
    git clone https://github.com/your-username/personal-expense-tracker.git
    cd personal-expense-tracker
    ```
-2. **Run the Backend**:
-   - Install dependencies
-     ```sh
-     pip install grpcio grpcio-tools SQLAlchemy psycopg2
-     ```
-   - Start the gRPC server
-     ```sh
-     python server.py
-     ```
-3. **Launch the Flutter App**:
-   - Install dependencies
-     ```sh
-     flutter pub get
-     ```
-   - Run setup.py
-     ```sh
-     python setup.py
-     ```
-   - Run the app on an emulator or device
-     ```sh
-     flutter run
-     ```
+
+2. **Generate gRPC Code & Run Backend**\
+   Link to the automation script in your repo: [setup.py](./setup.py)
+
+   From the project root run:
+
+   ```bash
+   python setup.py
+   python server.py
+   ```
+
+3. **Launch the Flutter App**
+
+   ```sh
+   cd PersonalExpenseTracker
+   flutter pub get
+   flutter run
+   ```
+
+## Setup Script
+
+The `setup.py` script automates the generation of gRPC code for both Python and Dart front-end. You can view and modify it directly: [setup.py](./setup.py)
+In the setup.py just make sure you change the  r'C:\Users\ariqs\local\protoc-29.1-win64\include' to whereever your protoc application is
+
+## Folder Structure
+
+```
+├─ .vscode/                 # VS Code settings
+├─ android/                 # Android build files
+├─ docs/                    # Documentation
+├─ grpc-proto/              # .proto definitions
+├─ ios/                     # iOS build files
+├─ lib/                     # Dart source
+│  ├─ backend/              # Python backend code
+│  │  └─ python/            # Generated Python gRPC stubs & server code
+│  ├─ pages/                # Flutter UI pages
+│  ├─ services/             # Generated Dart gRPC client code
+│  ├─ widgets/              # Reusable Flutter widgets
+│  └─ main.dart             # App entrypoint
+├─ linux/                   # Linux build files
+├─ macos/                   # macOS build files
+├─ test/                    # Unit & integration tests
+├─ web/                     # Web build files
+└─ windows/                 # Windows build files
+```
 
 ## Future Enhancements
 
@@ -91,10 +118,7 @@ The **Personal Expense Tracker** is licensed under the **MIT License**. Feel fre
 
 ### Contributors
 
-- **Ariq Serazi** - Development & Maintenance
+- **Ariq Serazi** – Development & Maintenance
 
-For contributions, please fork the repository and submit a pull request!
+*For contributions, please fork the repository and submit a pull request! 🚀*
 
----
-
-Start tracking your expenses efficiently today! 🚀
