@@ -69,6 +69,10 @@ The **Personal Expense Tracker** is a fully functional mobile application that a
      ```sh
      flutter pub get
      ```
+   - Run setup.py
+     ```sh
+     python setup.py
+     ```
    - Run the app on an emulator or device
      ```sh
      flutter run
