@@ -65,10 +65,6 @@ The **Personal Expense Tracker** is a fully functional mobile application that a
      python server.py
      ```
 3. **Launch the Flutter App**:
-   - Navigate to the frontend directory
-     ```sh
-     cd frontend
-     ```
    - Install dependencies
      ```sh
      flutter pub get
